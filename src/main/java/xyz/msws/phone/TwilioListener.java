@@ -18,8 +18,6 @@ public class TwilioListener {
         post("/sms", (req, res) -> {
             String body = req.queryParams("Body");
             String from = req.queryParams("From");
-            System.out.println("Received message: " + body);
-            System.out.println("From: " + from);
 
             bot.relayMessage(from, body);
 

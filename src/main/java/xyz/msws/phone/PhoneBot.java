@@ -97,7 +97,8 @@ public class PhoneBot extends ListenerAdapter implements IPhoneBot {
             if (channel.getTopic() == null) continue;
             if (channel.getTopic().equals(number)) return channel;
         }
-        jda.getGuilds().get(0).createTextChannel(number).setTopic(number).queue();
-        return getChannel(number);
+        TextChannel channel = jda.getGuilds().get(0).createTextChannel(number).complete();
+        channel.getManager().setTopic(number).queue();
+        return channel;
     }
 }
