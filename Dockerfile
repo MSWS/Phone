@@ -1,21 +1,19 @@
-# Use the official Maven image for a build stage
-FROM maven:3.8.4-openjdk-17 as build
+# Use the official Maven image to create a build artifact
+FROM maven:3.8.4-openjdk-17 as builder
 
-# Set the working directory
-WORKDIR /home/app
-
-# Copy the project files to the container
-COPY src /home/app/src
-COPY pom.xml /home/app
+# Copy the project files into the image
+WORKDIR /app
+COPY src /app/src
+COPY pom.xml /app
 
 # Package the application
 RUN mvn clean package
 
-# Use the official OpenJDK image for a slim runtime stage
-FROM openjdk:17-alpine
+# Use OpenJDK for the runtime
+FROM openjdk:17-slim
 
-# Copy the built jar file from the build stage
-COPY --from=build /home/app/target/*.jar /usr/local/lib/application.jar
+# Copy the built jar file from the builder stage
+COPY --from=builder /app/target/Number-*.jar /Number.jar
 
-# Run the jar file
-ENTRYPOINT ["java","-jar","/usr/local/lib/application.jar"]
+# Run the bot
+CMD ["java", "-jar", "/Number.jar"]
