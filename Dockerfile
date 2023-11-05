@@ -7,13 +7,13 @@ COPY src /app/src
 COPY pom.xml /app
 
 # Package the application
-RUN mvn clean package
+RUN mvn clean package && ls -la /app/target
 
 # Use OpenJDK for the runtime
 FROM openjdk:17-slim
 
 # Copy the built jar file from the builder stage
-COPY --from=builder /app/target/Number-*.jar /Number.jar
+COPY --from=builder /app/target/Number*-with-dependencies.jar /Number.jar
 
 # Run the bot
 CMD ["java", "-jar", "/Number.jar"]
