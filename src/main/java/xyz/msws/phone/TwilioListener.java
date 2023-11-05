@@ -1,23 +1,31 @@
 package xyz.msws.phone;
 
-import java.io.IOException;
+import com.twilio.twiml.MessagingResponse;
+import com.twilio.twiml.messaging.Body;
+import com.twilio.twiml.messaging.Message;
 
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import static spark.Spark.*;
 
-@WebServlet(name = "TwilioServlet", urlPatterns = "/sms")
-public class TwilioListener extends HttpServlet {
-    private final IPhoneBot bot;
+public class TwilioListener {
+
+    private IPhoneBot bot;
 
     public TwilioListener(IPhoneBot bot) {
         this.bot = bot;
-    }
 
-    public void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String from = request.getParameter("From");
-        String body = request.getParameter("Body");
-        bot.relayMessage(from, body);
+        get("/", (req, res) -> "Hello Web");
+
+        post("/sms", (req, res) -> {
+            String body = req.queryParams("Body");
+            String from = req.queryParams("From");
+            System.out.println("Received message: " + body);
+            System.out.println("From: " + from);
+
+            bot.relayMessage(from, body);
+
+            res.type("application/xml");
+            MessagingResponse twiml = new MessagingResponse.Builder().build();
+            return twiml.toXml();
+        });
     }
 }
