@@ -11,13 +11,13 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
+import net.dv8tion.jda.api.utils.FileUpload;
 import xyz.msws.phone.commands.Command;
 import xyz.msws.phone.commands.PingCommand;
 import xyz.msws.phone.commands.TextCommand;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
+import java.util.*;
 
 public class PhoneBot extends ListenerAdapter implements IPhoneBot {
     private final JDA jda;
@@ -89,6 +89,16 @@ public class PhoneBot extends ListenerAdapter implements IPhoneBot {
     public void relayMessage(String number, String message) {
         TextChannel channel = getChannel(number);
         channel.sendMessage(message).queue();
+    }
+
+    @Override
+    public void relayMessage(String number, String message, List<File> attachments) {
+        TextChannel channel = getChannel(number);
+        List<FileUpload> uploads = new ArrayList<>();
+        for (File file : attachments) {
+            uploads.add(FileUpload.fromData(file));
+        }
+        channel.sendMessage(message).addFiles(uploads).queue();
     }
 
     private TextChannel getChannel(String number) {
