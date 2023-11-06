@@ -75,12 +75,12 @@ public class TwilioListener {
                     bot.relayMessage(from, body, attachments);
                 }
 
-                res.type("application/xml");
-                MessagingResponse twiml = new MessagingResponse.Builder().build();
-                return twiml.toXml();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            res.type("application/xml");
+            MessagingResponse twiml = new MessagingResponse.Builder().build();
+            return twiml.toXml();
         });
     }
 
