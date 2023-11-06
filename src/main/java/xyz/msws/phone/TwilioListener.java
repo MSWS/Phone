@@ -39,30 +39,33 @@ public class TwilioListener {
 
             List<File> attachments = new ArrayList<>();
 
-            while (numMedia > 0) {
-                System.out.println("NumMedia: " + numMedia);
-                numMedia = numMedia - 1;
+            try {
+                if (numMedia > 0) while (numMedia > 0) {
+                    System.out.println("NumMedia: " + numMedia);
+                    numMedia = numMedia - 1;
 
-                // Get all info
-                String mediaUrl = parameters.get(String.format("MediaUrl%d", numMedia));
-                String contentType = parameters.get(String.format("MediaContentType%d", numMedia));
-                String fileName = mediaUrl.substring(mediaUrl.lastIndexOf("/") + 1);
+                    // Get all info
+                    String mediaUrl = parameters.get(String.format("MediaUrl%d", numMedia));
+                    String contentType = parameters.get(String.format("MediaContentType%d", numMedia));
+                    String fileName = mediaUrl.substring(mediaUrl.lastIndexOf("/") + 1);
 //                    MimeType mimeType = MimeTypes.getDefaultMimeByExtension(contentType);
 //                    MimeType mimeType = allTypes.forName(contentType);
-                String fileExtension = MimeTypes.getDefaultMimeByExtension(contentType);
-                System.out.println("Saving to " + fileName + fileExtension);
-                File file = new File(fileName + fileExtension);
+                    String fileExtension = MimeTypes.getDefaultMimeByExtension(contentType);
+                    System.out.println("Saving " + contentType + " to " + fileName + fileExtension);
+                    File file = new File(fileName + fileExtension);
 
-                // Download file
-                URL url = new URL(mediaUrl);
-                CloseableHttpClient httpclient = HttpClients.custom()
-                        .setRedirectStrategy(new LaxRedirectStrategy())
-                        .build();
-                HttpGet get = new HttpGet(url.toURI());
-                HttpResponse response = httpclient.execute(get);
-                InputStream source = response.getEntity().getContent();
-                FileUtils.copyInputStreamToFile(source, file);
-                attachments.add(file);
+                    // Download file
+                    URL url = new URL(mediaUrl);
+                    CloseableHttpClient httpclient = HttpClients.custom().setRedirectStrategy(new LaxRedirectStrategy()).build();
+                    HttpGet get = new HttpGet(url.toURI());
+                    HttpResponse response = httpclient.execute(get);
+                    InputStream source = response.getEntity().getContent();
+                    FileUtils.copyInputStreamToFile(source, file);
+                    attachments.add(file);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
             String body = req.queryParams("Body");
