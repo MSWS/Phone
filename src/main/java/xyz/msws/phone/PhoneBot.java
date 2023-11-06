@@ -71,6 +71,7 @@ public class PhoneBot extends ListenerAdapter implements IPhoneBot {
         String number = textChannel.getTopic();
         String message = event.getMessage().getContentRaw();
         getMessenger().sendMessage(number, message);
+        event.getMessage().getAttachments().forEach(attachment -> getMessenger().sendMessage(number, attachment.getUrl()));
         // Add checkmark reaction to message
         event.getMessage().addReaction(Emoji.fromUnicode("U+2705")).queue();
     }
