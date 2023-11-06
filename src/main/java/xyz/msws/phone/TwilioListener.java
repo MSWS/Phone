@@ -40,6 +40,7 @@ public class TwilioListener {
             List<File> attachments = new ArrayList<>();
 
             while (numMedia > 0) {
+                System.out.println("NumMedia: " + numMedia);
                 numMedia = numMedia - 1;
 
                 // Get all info
