@@ -2,12 +2,15 @@ package xyz.msws.phone;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
@@ -112,5 +115,12 @@ public class PhoneBot extends ListenerAdapter implements IPhoneBot {
         TextChannel channel = jda.getGuilds().get(0).createTextChannel(number).complete();
         channel.getManager().setTopic(number).queue();
         return channel;
+    }
+
+    @Override
+    public void onReady(ReadyEvent event) {
+        this.jda.getPresence().setStatus(OnlineStatus.ONLINE);
+        Activity activity = Activity.listening(System.getenv("TWILIO_SENDER"));
+        this.jda.getPresence().setActivity(activity);
     }
 }
