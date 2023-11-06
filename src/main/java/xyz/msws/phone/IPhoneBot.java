@@ -1,5 +1,8 @@
 package xyz.msws.phone;
 
+/**
+ * Responsible for interacting from SMS <-> Discord
+ */
 public interface IPhoneBot {
     Messenger getMessenger();
 

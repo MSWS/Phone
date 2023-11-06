@@ -1,19 +1,19 @@
 package xyz.msws.phone;
 
 import com.twilio.twiml.MessagingResponse;
-import com.twilio.twiml.messaging.Body;
-import com.twilio.twiml.messaging.Message;
 
-import static spark.Spark.*;
+import static spark.Spark.post;
 
+/**
+ * Listens for Twilio messages and relays them to the bot
+ * Returns an empty TwiML response
+ */
 public class TwilioListener {
 
-    private IPhoneBot bot;
+    private final IPhoneBot bot;
 
     public TwilioListener(IPhoneBot bot, String webhook) {
         this.bot = bot;
-
-//        get("/", (req, res) -> "Hello Web");
 
         post("/" + webhook, (req, res) -> {
             String body = req.queryParams("Body");

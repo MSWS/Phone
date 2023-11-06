@@ -1,5 +1,8 @@
 package xyz.msws.phone;
 
+/**
+ * Responsible for sanitizing phone numbers to E.164 format
+ */
 public class NumberSanitizer {
     public static String formatToE164(String phoneNumber) {
         // Remove all non-digit characters from the phone number
