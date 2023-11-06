@@ -22,7 +22,7 @@ import java.util.*;
 public class PhoneBot extends ListenerAdapter implements IPhoneBot {
     private final JDA jda;
     private final Map<String, Command> commands = new HashMap<>();
-    private Messenger messenger;
+    private final Messenger messenger;
 
     private final EnumSet<GatewayIntent> intents = EnumSet.of(
             // Enables MessageReceivedEvent for guild (also known as servers)
@@ -95,7 +95,6 @@ public class PhoneBot extends ListenerAdapter implements IPhoneBot {
 
     @Override
     public void relayMessage(String number, String message, List<File> attachments) {
-        System.out.println("Relaying message with " + attachments.size() + " attachments");
         TextChannel channel = getChannel(number);
         List<FileUpload> uploads = new ArrayList<>();
         for (File file : attachments) {

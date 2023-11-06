@@ -40,7 +40,6 @@ public class TwilioListener {
 
                 List<File> attachments = new ArrayList<>();
                 if (numMedia > 0) while (numMedia > 0) {
-                    System.out.println("NumMedia: " + numMedia);
                     numMedia = numMedia - 1;
 
                     // Get all info
@@ -48,7 +47,6 @@ public class TwilioListener {
                     String contentType = parameters.get(String.format("MediaContentType%d", numMedia));
                     String fileName = mediaUrl.substring(mediaUrl.lastIndexOf("/") + 1);
                     String fileExtension = MimeTypes.getDefaultMimeTypes().forName(contentType).getExtension();
-                    System.out.println("Saving " + contentType + " to " + fileName + fileExtension);
                     File file = new File(fileName + fileExtension);
 
                     // Download file
@@ -64,13 +62,10 @@ public class TwilioListener {
 
                 String body = parameters.get("Body");
                 String from = parameters.get("From");
-                System.out.println("Body: " + body + " From: " + from);
-                System.out.println("Attachments: " + attachments.size());
 
                 if (attachments.isEmpty()) {
                     bot.relayMessage(from, body);
                 } else {
-                    System.out.println("Calling relayMessage with  + " + attachments.size() + " attachments");
                     bot.relayMessage(from, body, attachments);
                 }
 
