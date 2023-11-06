@@ -66,8 +66,13 @@ public class TwilioListener {
 
             String body = req.queryParams("Body");
             String from = req.queryParams("From");
+            System.out.println("Attachments: " + attachments.size());
 
-            bot.relayMessage(from, body, attachments);
+            if (attachments.isEmpty()) {
+                bot.relayMessage(from, body);
+            } else {
+                bot.relayMessage(from, body, attachments);
+            }
 
             res.type("application/xml");
             MessagingResponse twiml = new MessagingResponse.Builder().build();
