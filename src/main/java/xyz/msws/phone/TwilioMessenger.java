@@ -30,6 +30,10 @@ public class TwilioMessenger implements Messenger {
         for (File attach : attachment) {
             urls.add(attach.toURI());
         }
-        Message.creator(new PhoneNumber(number), new PhoneNumber(SENDER), message).setMediaUrl(urls).create();
+        if (message == null) {
+            Message.creator(new PhoneNumber(number), new PhoneNumber(SENDER), urls).create();
+        } else {
+            Message.creator(new PhoneNumber(number), new PhoneNumber(SENDER), message).setMediaUrl(urls).create();
+        }
     }
 }
