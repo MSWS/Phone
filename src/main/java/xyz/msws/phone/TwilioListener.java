@@ -64,8 +64,9 @@ public class TwilioListener {
                 }
 
 
-                String body = req.queryParams("Body");
-                String from = req.queryParams("From");
+                String body = parameters.get("Body");
+                String from = parameters.get("From");
+                System.out.println("Body: " + body + " From: " + from);
                 System.out.println("Attachments: " + attachments.size());
 
                 if (attachments.isEmpty()) {
