@@ -7,7 +7,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.LaxRedirectStrategy;
-import org.eclipse.jetty.http.MimeTypes;
+import org.apache.tika.mime.MimeTypes;
 
 import java.io.File;
 import java.io.InputStream;
@@ -47,9 +47,7 @@ public class TwilioListener {
                     String mediaUrl = parameters.get(String.format("MediaUrl%d", numMedia));
                     String contentType = parameters.get(String.format("MediaContentType%d", numMedia));
                     String fileName = mediaUrl.substring(mediaUrl.lastIndexOf("/") + 1);
-//                    MimeType mimeType = MimeTypes.getDefaultMimeByExtension(contentType);
-//                    MimeType mimeType = allTypes.forName(contentType);
-                    String fileExtension = MimeTypes.getDefaultMimeByExtension(contentType);
+                    String fileExtension = MimeTypes.getDefaultMimeTypes().forName(contentType).getExtension();
                     System.out.println("Saving " + contentType + " to " + fileName + fileExtension);
                     File file = new File(fileName + fileExtension);
 
