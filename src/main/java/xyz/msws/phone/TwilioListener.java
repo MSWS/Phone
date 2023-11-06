@@ -33,13 +33,12 @@ public class TwilioListener {
         this.bot = bot;
 
         post("/" + webhook, (req, res) -> {
-            Map<String, String> parameters = parseBody(req.body());
-            String numMediaStr = parameters.get("NumMedia");
-            int numMedia = Integer.parseInt(numMediaStr);
-
-            List<File> attachments = new ArrayList<>();
-
             try {
+                Map<String, String> parameters = parseBody(req.body());
+                String numMediaStr = parameters.get("NumMedia");
+                int numMedia = Integer.parseInt(numMediaStr);
+
+                List<File> attachments = new ArrayList<>();
                 if (numMedia > 0) while (numMedia > 0) {
                     System.out.println("NumMedia: " + numMedia);
                     numMedia = numMedia - 1;
@@ -64,24 +63,24 @@ public class TwilioListener {
                     attachments.add(file);
                 }
 
+
+                String body = req.queryParams("Body");
+                String from = req.queryParams("From");
+                System.out.println("Attachments: " + attachments.size());
+
+                if (attachments.isEmpty()) {
+                    bot.relayMessage(from, body);
+                } else {
+                    System.out.println("Calling relayMessage with  + " + attachments.size() + " attachments");
+                    bot.relayMessage(from, body, attachments);
+                }
+
+                res.type("application/xml");
+                MessagingResponse twiml = new MessagingResponse.Builder().build();
+                return twiml.toXml();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            String body = req.queryParams("Body");
-            String from = req.queryParams("From");
-            System.out.println("Attachments: " + attachments.size());
-
-            if (attachments.isEmpty()) {
-                bot.relayMessage(from, body);
-            } else {
-                System.out.println("Calling relayMessage with  + " + attachments.size() + " attachments");
-                bot.relayMessage(from, body, attachments);
-            }
-
-            res.type("application/xml");
-            MessagingResponse twiml = new MessagingResponse.Builder().build();
-            return twiml.toXml();
         });
     }
 
