@@ -95,9 +95,9 @@ public class PhoneBot extends ListenerAdapter implements IPhoneBot {
 
     @Override
     public void relayMessage(String number, String message, List<File> attachments) {
+        System.out.println("Relaying message with " + attachments.size() + " attachments");
         TextChannel channel = getChannel(number);
         List<FileUpload> uploads = new ArrayList<>();
-        System.out.println("Relaying message with " + attachments.size() + " attachments");
         for (File file : attachments) {
             uploads.add(FileUpload.fromData(file));
         }

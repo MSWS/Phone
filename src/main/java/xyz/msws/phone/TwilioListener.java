@@ -72,6 +72,7 @@ public class TwilioListener {
             if (attachments.isEmpty()) {
                 bot.relayMessage(from, body);
             } else {
+                System.out.println("Calling relayMessage with  + " + attachments.size() + " attachments");
                 bot.relayMessage(from, body, attachments);
             }
 
