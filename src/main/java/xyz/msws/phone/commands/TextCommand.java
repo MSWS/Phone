@@ -41,7 +41,7 @@ public class TextCommand implements Command {
         if (event.getOption("alias") != null) channelName = event.getOption("alias").getAsString();
 
         TextChannel channel = guild.createTextChannel(channelName).complete();
-        channel.getManager().setTopic(number).queue();
+        channel.getManager().setTopic(number).setParent(event.getChannel().asTextChannel().getParentCategory()).queue();
         event.getHook().editOriginal("Created text channel <#" + channel.getId() + ">").queue();
     }
 }
